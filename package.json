@@ -9,7 +9,9 @@
     "index.js"
   ],
   "scripts": {
-    "build": "tsc -b && npm run package",
+    "clean": "rm -rf dist lib tsconfig.tsbuildinfo",
+    "clone-meta": "cp LICENSE README.md action.yml dist",
+    "build": "tsc -b && npm run package && npm run clone-meta",
     "package": "ncc build lib/main.js -s -m --license licenses.txt",
     "lint": "eslint ./src"
   },
