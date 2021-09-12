@@ -7,7 +7,7 @@ on:
 env:
   GH_USERNAME: Mogeko
   GH_EMAIL: zhengjunyi@live.com
-  GH_REPO: github.com/Mogeko/mogeko.github.io
+  GH_REPO: github.com/Mogeko/opencc-action
   GH_BRANCH: dist
 
 jobs:
