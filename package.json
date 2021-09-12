@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build": "tsc -b && npm run package",
-    "package": "build && ncc build lib/main.js -s -m --license licenses.txt",
+    "package": "ncc build lib/main.js -s -m --license licenses.txt",
     "lint": "eslint ."
   },
   "repository": {
@@ -30,6 +30,7 @@
     "opencc": "^1.1.3"
   },
   "devDependencies": {
+    "@types/node": "^16.9.1",
     "@vercel/ncc": "^0.31.0",
     "eslint": "^7.32.0",
     "typescript": "^4.4.3"

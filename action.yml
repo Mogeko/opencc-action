@@ -1,0 +1,21 @@
+name: 'OpenCC'
+author: 'Mogeko'
+description: 'Running OpenCC on Github Action.'
+input:
+  input:
+    description: ''
+    required: true
+  output:
+    description: ''
+    required: true
+  config:
+    description: ''
+    required: true
+
+branding:
+  icon: 'check-square'
+  color: 'white'
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
