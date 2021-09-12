@@ -2,9 +2,9 @@ name: Build && Lint
 
 on:
   push:
-    branches-ignore: [master, main]
+    branches-ignore: [master, dist]
   pull_request:
-    branches: [master, main]
+    branches: [master, dist]
 
 jobs:
   linter:
