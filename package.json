@@ -1,0 +1,37 @@
+{
+  "name": "opencc-action",
+  "version": "1.0.0",
+  "description": "Running OpenCC on Github Action.",
+  "main": "lib/main.js",
+  "types": "lib/*.d.ts",
+  "files": [
+    "lib/*",
+    "index.js"
+  ],
+  "scripts": {
+    "build": "tsc -b && npm run package",
+    "package": "build && ncc build lib/main.js -s -m --license licenses.txt",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mogeko/opencc-action.git"
+  },
+  "keywords": [],
+  "author": "Mogeko <zhengjunyi@live.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Mogeko/opencc-action/issues",
+    "email": "zhengjunyi@live.com"
+  },
+  "homepage": "https://github.com/Mogeko/opencc-action",
+  "dependencies": {
+    "@actions/core": "^1.5.0",
+    "opencc": "^1.1.3"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.31.0",
+    "eslint": "^7.32.0",
+    "typescript": "^4.4.3"
+  }
+}
