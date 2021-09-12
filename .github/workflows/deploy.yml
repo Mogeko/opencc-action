@@ -35,9 +35,8 @@ jobs:
           name: dist
           path: dist
 
-
   deploy:
-    needs: [build, linter]
+    needs: build
     runs-on: ubuntu-latest
     container:
       image: alpine/git
