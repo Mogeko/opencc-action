@@ -50,10 +50,11 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: dist
+          name: dist-dev
           path: dist
 
   deploy-dev:
+    if: ${{ github.event_name == 'pull_request' }}
     needs: [build, linter]
     runs-on: ubuntu-latest
     container:
@@ -62,7 +63,7 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@v2
         with:
-          name: dist
+          name: dist-dev
       - name: Setup git
         run: |
           git config --global user.name "${GH_USERNAME}"
