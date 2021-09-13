@@ -3,18 +3,18 @@ author: 'Mogeko'
 description: 'Running OpenCC on Github Action.'
 input:
   input:
-    description: ''
+    description: 'Input file or folder (excluding subfolders)'
     required: true
   output:
-    description: ''
+    description: 'The output file or folder, it needs to correspond to the input,'
     required: true
   config:
-    description: ''
+    description: 'Configuration file, e.g. s2t.json s2t.json...'
     required: true
 
 branding:
-  icon: 'check-square'
-  color: 'white'
+  icon: 'type'
+  color: 'gray-dark'
 
 runs:
   using: 'node16'
