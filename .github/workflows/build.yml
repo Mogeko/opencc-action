@@ -82,3 +82,22 @@ jobs:
             fi
           done
           exit 1
+
+  test:
+    name: Test
+    runs-on: Ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: OpenCC s2t
+        uses: mogeko/opencc-action@dist-dev
+        with:
+          input: example/in
+          output: example/out
+          config: s2t.json
+      - name: Check
+        run: |
+          diff example/ans/example.ans example/out/example.test
+          diff example/ans/s2t.ans example/out/s2t.test
