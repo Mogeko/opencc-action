@@ -1,0 +1,104 @@
+name: Build && Lint
+
+on:
+  push:
+    branches-ignore: [master, dist*]
+  pull_request:
+    branches: [master, dist*]
+
+env:
+  GH_USERNAME: Mogeko
+  GH_EMAIL: zhengjunyi@live.com
+  GH_REPO: github.com/Mogeko/opencc-action
+  GH_BRANCH: dist-dev
+
+jobs:
+  linter:
+    name: Lint Code Base
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Lint Code Base
+        uses: github/super-linter/slim@v4
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_TYPESCRIPT_STANDARD: false
+          DEFAULT_BRANCH: master
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    name: Build
+    runs-on: Ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+      - name: Setup yarn
+        run: yarn install
+      - name: Lint Code
+        run: yarn lint
+      - name: Run Build
+        run: yarn build
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist-dev
+          path: dist
+
+  deploy-dev:
+    if: ${{ github.event_name == 'pull_request' }}
+    needs: [build, linter]
+    runs-on: ubuntu-latest
+    container:
+      image: alpine/git
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: dist-dev
+      - name: Setup git
+        run: |
+          git config --global user.name "${GH_USERNAME}"
+          git config --global user.email "${GH_EMAIL}"
+      - name: Deploy to GitHub
+        run: |
+          git init && git add .
+          for try_time in $(seq 0 9); do
+            echo "Deploy the website"
+            git commit -m "Build By GitHub Actions on $(date "+%Y-%m-%d %T")"
+            if git push -f "https://${{ secrets.DEPLOY_TOKEN }}@${GH_REPO}" master:"${GH_BRANCH}"; then
+              exit 0
+            else
+              echo "Deploy the website, retry: ${try_time}"
+              sleep "$(shuf -i 3-10 -n 1)"
+            fi
+          done
+          exit 1
+
+  test:
+    name: Test
+    needs: deploy-dev
+    runs-on: Ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: OpenCC s2t
+        uses: mogeko/opencc-action@dist-dev
+        with:
+          input: example/in
+          output: example/out
+          config: s2t.json
+      - name: Check
+        run: |
+          diff example/ans/example.ans example/out/example.test
+          diff example/ans/s2t.ans example/out/s2t.test
